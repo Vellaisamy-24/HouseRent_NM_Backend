@@ -70,5 +70,51 @@ const signUp = async (req, res) => {
     });
   }
 };
+const GoogleAuthentication = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(email, "Email from Gauth");
+    const existUser = await userModel.findOne({ email });
+    if (existUser) {
+      const jwtToken = await jwt.sign(
+        { id: existUser._id },
+        process.env.JWT_SECRET
+      );
+      const { password: pass, ...rest } = existUser._doc;
+      return res
+        .cookie("token", jwtToken, { httpOnly: true })
+        .status(200)
+        .json({
+          success: true,
+          message: "Goolge Auth Success",
+          token: jwtToken,
+          user: rest,
+        });
+    } else {
+      const password =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashPassword = await bcryptjs.hash(password, 10);
+      const newUser = await userModel.create({
+        email: req.body.email,
+        password: hashPassword,
+        // profile
+      });
+      const token = await jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const { password: pass, ...rest } = newUser._doc;
+      return res.cookie("token", token).status(201).json({
+        success: true,
+        message: "Google Auth success for new User",
+        user: rest,
+        token: token,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-module.exports = { signUp, login };
+module.exports = { signUp, login, GoogleAuthentication };
