@@ -24,11 +24,20 @@ const login = async (req, res) => {
         .json({ success: false, message: "Invalid password" });
     }
     const { password: pass, ...rest } = userExists._doc;
-    const jwtToken = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET);
+    if (email === "vellaikarthick24@gmail.com") {
+      userExists.isAdmin = true;
+      await userExists.save();
+    }
+
+    const jwtToken = jwt.sign(
+      { id: userExists._id, isAdmin: userExists.isAdmin },
+      process.env.JWT_SECRET
+    );
     return res.cookie("token", jwtToken, { httpOnly: true }).status(200).json({
       success: true,
       message: "login success",
       user: rest,
+      isAdmin: userExists.isAdmin,
       token: jwtToken,
     });
   } catch (err) {
@@ -81,6 +90,10 @@ const GoogleAuthentication = async (req, res) => {
         process.env.JWT_SECRET
       );
       const { password: pass, ...rest } = existUser._doc;
+      if (email == "vellaikarthick24@gmail.com") {
+        existUser.isAdmin = true;
+        await existUser.save();
+      }
       return res
         .cookie("token", jwtToken, { httpOnly: true })
         .status(200)
@@ -89,6 +102,7 @@ const GoogleAuthentication = async (req, res) => {
           message: "Goolge Auth Success",
           token: jwtToken,
           user: rest,
+          isAdmin: existUser.isAdmin,
         });
     } else {
       const password =
@@ -102,11 +116,16 @@ const GoogleAuthentication = async (req, res) => {
       });
       const token = await jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
+      if (email == "vellaikarthick24@gmail.com") {
+        newUser.isAdmin = true;
+        await existUser.save();
+      }
       return res.cookie("token", token).status(201).json({
         success: true,
         message: "Google Auth success for new User",
         user: rest,
         token: token,
+        isAdmin: existUser.isAdmin,
       });
     }
   } catch (error) {
