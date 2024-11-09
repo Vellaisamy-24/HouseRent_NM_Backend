@@ -17,8 +17,10 @@ mongoose
   });
 const adminRoute = require("./routes/adminRoute");
 const userRoute = require("./routes/userRoute");
+const propertyRoute = require("./routes/propertyRoute");
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/property", propertyRoute);
 app.listen(process.env.PORT, (req, res) => {
   console.log(`Listening to ${process.env.PORT}`);
 });

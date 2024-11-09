@@ -10,9 +10,10 @@ const {
   adminAuthorization,
 } = require("../Middleware/authMiddleware");
 const router = express.Router();
-router
-  .route("/getAllUsers")
-  .get(authentication, adminAuthorization, getAllUsers);
+router.route("/getAllUsers").get(
+  // authentication, adminAuthorization,
+  getAllUsers
+);
 router.route("/getUser").post(authentication, adminAuthorization, findUser);
 router
   .route("/deleteUser")
