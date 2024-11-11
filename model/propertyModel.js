@@ -22,14 +22,14 @@ const propertySchema = new mongoose.Schema(
       type: Number,
     },
     area: {
-      type: Number,
+      type: String,
     },
     images: [
       {
         type: String,
       },
     ],
-    isAvaible: {
+    isAvailable: {
       type: Boolean,
       default: false,
     },

@@ -74,7 +74,7 @@ const deleteProperty = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      messgage: error.message,
+      message: error.message,
     });
   }
 };
@@ -86,7 +86,7 @@ const updateProperty = async (req, res) => {
     if (!findProperty) {
       return res.status(404).json({
         success: false,
-        messgage: "Property id not found for update",
+        message: "Property id not found for update",
       });
     }
     const updateProperty = await propertyModel.findByIdAndUpdate(

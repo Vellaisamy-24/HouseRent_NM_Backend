@@ -1,4 +1,5 @@
 const userModel = require("../model/userModel");
+const propertyModel = require("../model/propertyModel");
 const getAllUsers = async (req, res) => {
   try {
     const user = await userModel.find();
@@ -81,4 +82,24 @@ const deleteAllUser = async (req, res) => {
     });
   }
 };
-module.exports = { getAllUsers, findUser, deleteUser, deleteAllUser };
+const deleteAllProperty = async (req, res) => {
+  try {
+    const deleteAll = await propertyModel.deleteMany();
+    return res.status(200).json({
+      success: false,
+      message: "Deleted Property",
+      deleteAll,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+module.exports = {
+  getAllUsers,
+  deleteAllProperty,findUser,
+  deleteUser,
+  deleteAllUser,
+};

@@ -4,7 +4,9 @@ const {
   findUser,
   deleteUser,
   deleteAllUser,
+  deleteAllProperty,
 } = require("../controller/adminController");
+
 const {
   authentication,
   adminAuthorization,
@@ -21,5 +23,6 @@ router
 router
   .route("/deleteAllUser")
   .delete(authentication, adminAuthorization, deleteAllUser);
+router.route("/deleteAllProperty").delete(deleteAllProperty);
 
 module.exports = router;
