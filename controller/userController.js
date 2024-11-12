@@ -135,5 +135,79 @@ const GoogleAuthentication = async (req, res) => {
     });
   }
 };
+const updateProfile = async (req, res) => {
+  try {
+    const { email } = req.body;
+    // const userExists = await userModel.findOne({ email });
+    // if (!userExists) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "User not found",
+    //   });
+    // }
+    console.log(req.body)
+    const updateUser = await userModel.findOneAndUpdate(
+      { email },
+      {
+        $set: {
+          userName: req.body.userName,
+          address: req.body.address,
+          pinCode: req.body.pinCode,
+          mobileNo: req.body.mobileNo,
+          country: req.body.country,
+          address: req.body.address,
+          state: req.body.state,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    if (!updateUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "profile updated",
+      user: updateUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-module.exports = { signUp, login, GoogleAuthentication };
+const fetchUser = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const findUser = await userModel.findOne({ email });
+    if (!findUser) {
+      return res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "user fetch success",
+      user: findUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+module.exports = {
+  signUp,
+  login,
+  GoogleAuthentication,
+  updateProfile,
+  fetchUser,
+};

@@ -16,6 +16,21 @@ const schema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    state: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    mobileNo: {
+      type: String,
+    },
+    pinCode: {
+      type: String,
+    },
   },
 
   {

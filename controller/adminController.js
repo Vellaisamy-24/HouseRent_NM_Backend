@@ -99,7 +99,8 @@ const deleteAllProperty = async (req, res) => {
 };
 module.exports = {
   getAllUsers,
-  deleteAllProperty,findUser,
+  deleteAllProperty,
+  findUser,
   deleteUser,
   deleteAllUser,
 };
