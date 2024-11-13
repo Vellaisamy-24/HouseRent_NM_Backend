@@ -1,6 +1,7 @@
 const userModel = require("../model/userModel");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const propertyModel = require("../model/propertyModel");
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -145,7 +146,7 @@ const updateProfile = async (req, res) => {
     //     message: "User not found",
     //   });
     // }
-    console.log(req.body)
+    console.log(req.body);
     const updateUser = await userModel.findOneAndUpdate(
       { email },
       {
@@ -204,10 +205,28 @@ const fetchUser = async (req, res) => {
     });
   }
 };
+
+const fetchProperty = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const fetchProperty = await propertyModel.find({ email: email });
+    return res.status(200).json({
+      success: true,
+      message: "property fetch by email",
+      property: fetchProperty,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      succcess: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   signUp,
   login,
   GoogleAuthentication,
   updateProfile,
   fetchUser,
+  fetchProperty,
 };

@@ -24,6 +24,10 @@ const propertySchema = new mongoose.Schema(
     area: {
       type: String,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     images: [
       {
         type: String,
