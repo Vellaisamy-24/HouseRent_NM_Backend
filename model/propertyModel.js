@@ -40,6 +40,12 @@ const propertySchema = new mongoose.Schema(
     parking: {
       type: Boolean,
     },
+    state: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
     furnished: {
       type: Boolean,
     },

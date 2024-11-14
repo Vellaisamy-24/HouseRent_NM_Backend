@@ -123,10 +123,76 @@ const updateProperty = async (req, res) => {
     });
   }
 };
+const searchProperty = async (req, res) => {
+  try {
+
+    console.log(req.query);
+    let limit = parseInt(req.query.limit) || 100;
+    let startIndex = parseInt(req.query.startIndex) || 0;
+    let isAvailable = req.query.isAvailable;
+    if (isAvailable === undefined || isAvailable === "false") {
+      isAvailable = { $in: [false, true] };
+    }
+
+    let furnished = req.query.furnished;
+    if (furnished === undefined || furnished === "false") {
+      furnished = { $in: [false, true] };
+    }
+
+    let parking = req.query.parking;
+    if (parking === undefined || parking === "false") {
+      parking = { $in: [false, true] };
+    }
+
+    const searchTerm = req.query.searchTerm || "";
+    const sort = req.query.sort || "createdAt";
+    const order = req.query.order || "desc";
+
+    const query = {
+      $or: [
+        { state: { $regex: searchTerm, $options: "i" } },
+        { propertyType: { $regex: searchTerm, $options: "i" } },
+        { country: { $regex: searchTerm, $options: "i" } },
+      ],
+    };
+
+
+    if (isAvailable !== undefined) {
+      query.isAvailable = isAvailable;
+    }
+    if (furnished !== undefined) {
+      query.furnished = furnished;
+    }
+    if (parking !== undefined) {
+      query.parking = parking;
+    }
+
+
+    const propertyListing = await propertyModel
+      .find(query)
+      .sort({ [sort]: order })
+      .limit(limit)
+      .skip(startIndex);
+
+    return res.json({
+      success: true,
+      message: "Filtered Property Listings",
+      propertyListing,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   createProperty,
   getAllProperty,
   findProperty,
   deleteProperty,
   updateProperty,
+  searchProperty,
 };
