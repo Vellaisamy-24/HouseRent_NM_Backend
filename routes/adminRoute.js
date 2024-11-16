@@ -5,6 +5,7 @@ const {
   deleteUser,
   deleteAllUser,
   deleteAllProperty,
+  fetchAllBookings,
 } = require("../controller/adminController");
 
 const {
@@ -24,5 +25,6 @@ router
   .route("/deleteAllUser")
   .delete(authentication, adminAuthorization, deleteAllUser);
 router.route("/deleteAllProperty").delete(deleteAllProperty);
+router.route("/fetchBookings").get(fetchAllBookings);
 
 module.exports = router;

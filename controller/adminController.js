@@ -1,5 +1,6 @@
 const userModel = require("../model/userModel");
 const propertyModel = require("../model/propertyModel");
+const bookingModel=require("../model/BookingModels")
 const getAllUsers = async (req, res) => {
   try {
     const user = await userModel.find();
@@ -97,10 +98,32 @@ const deleteAllProperty = async (req, res) => {
     });
   }
 };
+const fetchAllBookings=async(req,res)=>
+{
+  try
+  {
+    const bookings=await bookingModel.find()
+    return res.status(200).json({
+      success:true,
+      message:"bookings fetch for admin",
+      bookings
+    })
+
+  }
+  catch(error)
+  {
+    res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+}
+
 module.exports = {
   getAllUsers,
   deleteAllProperty,
   findUser,
   deleteUser,
   deleteAllUser,
+  fetchAllBookings,
 };
